@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Calculator - Rolsa Technologies</title>
+    <link rel="stylesheet" href="{static 'calculator.css'}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Rolsa<span>Tech</span></h1>
+            </div>
+            <nav>
+                <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <label for="nav-toggle" class="nav-toggle-label">
+                    <span></span>
+                </label>
+                <ul>
+                    <li><a href="{url 'calculator.css'}">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="calculator.html" class="active">Energy Calculator</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="btn-login">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-banner">
+        <div class="container">
+            <h1>Energy Usage Calculator</h1>
+            <p>Track your carbon footprint and discover ways to reduce your energy consumption</p>
+        </div>
+    </section>
+
+    <section class="calculator-section">
+        <div class="container">
+            <div class="calculator-wrapper">
+                <div class="calculator-intro">
+                    <h2>Calculate Your Energy Usage</h2>
+                    <p>Fill in the form below to estimate your household's energy consumption and carbon footprint. Get personalized recommendations to reduce your environmental impact.</p>
+                </div>
+                
+                <form id="energy-calculator" class="calculator-form">
+                    <div class="form-section">
+                        <h3>Household Information</h3>
+                        <div class="form-group">
+                            <label for="household-size">Number of people in household</label>
+                            <input type="number" id="household-size" min="1" max="10" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="home-size">Home size (square feet)</label>
+                            <input type="number" id="home-size" min="100" step="100" value="1200">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Electricity Usage</h3>
+                        <div class="form-group">
+                            <label for="electricity-bill">Average monthly electricity bill ($)</label>
+                            <input type="number" id="electricity-bill" min="0" step="10" value="120">
+                        </div>
+                        <div class="form-group">
+                            <label>Do you use renewable energy?</label>
+                            <div class="radio-group">
+                                <input type="radio" id="renewable-yes" name="renewable" value="yes">
+                                <label for="renewable-yes">Yes</label>
+                                <input type="radio" id="renewable-no" name="renewable" value="no" checked>
+                                <label for="renewable-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Heating & Cooling</h3>
+                        <div class="form-group">
+                            <label for="heating-type">Primary heating source</label>
+                            <select id="heating-type">
+                                <option value="natural-gas">Natural Gas</option>
+                                <option value="electric">Electric</option>
+                                <option value="oil">Oil</option>
+                                <option value="propane">Propane</option>
+                                <option value="heat-pump">Heat Pump</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cooling-months">Months using air conditioning per year</label>
+                            <input type="range" id="cooling-months" min="0" max="12" value="3">
+                            <div class="range-value"><span id="cooling-months-value">3</span> months</div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Transportation</h3>
+                        <div class="form-group">
+                            <label for="vehicle-type">Primary vehicle type</label>
+                            <select id="vehicle-type">
+                                <option value="gas">Gasoline Car</option>
+                                <option value="diesel">Diesel Car</option>
+                                <option value="hybrid">Hybrid</option>
+                                <option value="electric">Electric Vehicle</option>
+                                <option value="none">No Car</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="miles-driven">Miles driven per week</label>
+                            <input type="number" id="miles-driven" min="0" step="10" value="150">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Appliances & Devices</h3>
+                        <div class="form-group checkbox-group">
+                            <label>Energy efficient appliances you use:</label>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="efficient-fridge" name="efficient-appliances" value="fridge">
+                                <label for="efficient-fridge">Refrigerator</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="efficient-washer" name="efficient-appliances" value="washer">
+                                <label for="efficient-washer">Washing Machine</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="efficient-dryer" name="efficient-appliances" value="dryer">
+                                <label for="efficient-dryer">Dryer</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="efficient-dishwasher" name="efficient-appliances" value="dishwasher">
+                                <label for="efficient-dishwasher">Dishwasher</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="calculate-btn" class="btn-primary">Calculate My Footprint</button>
+                        <button type="reset" class="btn-secondary">Reset Form</button>
+                    </div>
+                </form>
+
+                <div id="results" class="calculator-results" style="display: none;">
+                    <h3>Your Energy Profile</h3>
+                    <div class="results-container">
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="result-content">
+                                <h4>Estimated Monthly Energy Usage</h4>
+                                <p id="energy-usage-result" class="result-value">-- kWh</p>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div class="result-content">
+                                <h4>Estimated Carbon Footprint</h4>
+                                <p id="carbon-footprint-result" class="result-value">-- tons CO₂ per year</p>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="result-content">
+                                <h4>Compared to Average</h4>
+                                <p id="comparison-result" class="result-value">-- %</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendations">
+                        <h3>Personalized Recommendations</h3>
+                        <div id="recommendations-list-container">
+                            <ul id="recommendations-list" class="recommendation-list">
+                                <!-- Recommendations will be dynamically inserted here -->
+                            </ul>
+                        </div>
+
+                        <div class="additional-insights">
+                            <h4>Detailed Breakdown</h4>
+                            <div id="detailed-insights">
+                                <!-- More detailed insights will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="cta-container">
+                            <a href="contact.html" class="btn-primary">Schedule a Free Consultation</a>
+                            <a href="products.html" class="btn-secondary">Browse Energy Solutions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Footer content remains the same as in the original HTML -->
+        <div class="container">
+            <!-- ... (previous footer content) ... -->
+        </div>
+    </footer>
+
+    <script src="{static 'calculator.js'}"></script>
+</body>
+</html>

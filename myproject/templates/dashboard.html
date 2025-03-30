@@ -1,0 +1,255 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolsa Technologies - User Dashboard</title>
+
+    <link rel="stylesheet" href="{%static 'dashboard.css'%}">
+    <!-- Include Chart.js for the energy chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="https://via.placeholder.com/30" alt="Rolsa Logo">
+            <h1>Rolsa Technologies</h1>
+        </div>
+        <div class="menu">
+            <div class="menu-item active">
+                <i class="icon-dashboard"></i>
+                <span>Overview</span>
+            </div>
+            <div class="submenu">
+                <div class="menu-item active">
+                    <span>Summary</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <i class="icon-settings"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+
+            {%if user.is_authenticated%}
+                <h1>hello {{user.username}}! Welcome to your custom homepage</h1>
+                <p>Here are your energy usage stats and carbon footprint data</p>
+                <a href="{% url 'logout' %}">Logout</a>
+            
+
+            
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="icon-search"></i>
+                    <input type="text" placeholder="Search">
+                </div>
+                <div class="notifications">
+                    <i class="icon-bell"></i>
+                    <span class="badge">4</span>
+                </div>
+                <div class="user-profile">
+                    <span>{{user.username}}</span>
+                    <i class="icon-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="card stat-card">
+                <div class="stat-icon icon-sales"></div>
+                <h3>Total Energy Usage</h3>
+                <div class="stat-value">731 kWh</div>
+                <div class="stat-info">Last 30 days</div>
+                <div class="stat-trend up">
+                    <i class="icon-up"></i>
+                    <span>+15.6% vs previous period</span>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon icon-visitors"></div>
+                <h3>Carbon Footprint</h3>
+                <div class="stat-value">324 kg</div>
+                <div class="stat-info">CO₂ equivalent</div>
+                <div class="stat-trend down">
+                    <i class="icon-down"></i>
+                    <span>-12.7% vs previous period</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energy Performance Chart -->
+        <div class="card chart-card">
+            <div class="chart-header">
+                <h3>Energy Performance</h3>
+                <div class="chart-controls">
+                    <div class="dropdown">
+                        <select id="export-data">
+                            <option>Export data</option>
+                            <option>PDF</option>
+                            <option>CSV</option>
+                            <option>Excel</option>
+                        </select>
+                    </div>
+                    <div class="dropdown">
+                        <select id="time-period">
+                            <option>Last 14 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>Custom</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--primary-green);"></div>
+                    <span>Energy Usage</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #aaa;"></div>
+                    <span>Carbon Emissions</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="energy-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for the chart
+        const dates = ['03 Wed', '04 Thu', '05 Fri', '06 Sat', '07 Sun', '08 Mon', '09 Tue', 
+                       '10 Wed', '11 Thu', '12 Fri', '13 Sat', '14 Sun', '15 Mon', '16 Tue'];
+        
+        const energyUsage = [45, 52, 48, 55, 59, 47, 42, 50, 56, 54, 48, 51, 50, 53];
+        const carbonEmissions = [22, 25, 23, 26, 28, 21, 20, 24, 27, 25, 22, 23, 24, 26];
+        
+        // Create the chart
+        const ctx = document.getElementById('energy-chart').getContext('2d');
+        const energyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'Energy Usage (kWh)',
+                        data: energyUsage,
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#2ecc71',
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Carbon Emissions (kg CO₂e)',
+                        data: carbonEmissions,
+                        borderColor: '#aaa',
+                        backgroundColor: 'rgba(170, 170, 170, 0.1)',
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#aaa',
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Handle time period changes
+        document.getElementById('time-period').addEventListener('change', function() {
+            // In a real application, this would fetch new data
+            console.log(`Selected time period: ${this.value}`);
+            
+            // For this demo, we'll just randomize the data
+            if (this.value === 'Last 30 Days') {
+                updateChartWithNewData(30);
+            } else if (this.value === 'Last 90 Days') {
+                updateChartWithNewData(90);
+            } else {
+                // Default to 14 days
+                updateChartWithNewData(14);
+            }
+        });
+        
+        // Handle export options
+        document.getElementById('export-data').addEventListener('change', function() {
+            if (this.value !== 'Export data') {
+                alert(`Exporting data as ${this.value}. In a real application, this would download the data.`);
+                // Reset the dropdown
+                this.selectedIndex = 0;
+            }
+        });
+        
+        // Function to update chart with random data for demo purposes
+        function updateChartWithNewData(days) {
+            // Generate new date labels
+            const newDates = [];
+            const today = new Date();
+            
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const day = date.getDate().toString().padStart(2, '0');
+                const weekday = date.toLocaleDateString('en-US', { weekday: 'short' });
+                newDates.push(`${day} ${weekday}`);
+            }
+            
+            // Generate random data
+            const newEnergyUsage = Array.from({length: days}, () => Math.floor(Math.random() * 30) + 40);
+            const newCarbonEmissions = Array.from({length: days}, () => Math.floor(Math.random() * 15) + 15);
+            
+            // Update chart
+            energyChart.data.labels = newDates;
+            energyChart.data.datasets[0].data = newEnergyUsage;
+            energyChart.data.datasets[1].data = newCarbonEmissions;
+            energyChart.update();
+            
+            // Update stats cards with new totals
+            const totalEnergy = newEnergyUsage.reduce((sum, value) => sum + value, 0);
+            const totalCarbon = newCarbonEmissions.reduce((sum, value) => sum + value, 0);
+            
+            document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = `${totalEnergy} kWh`;
+            document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = `${totalCarbon} kg`;
+            
+            // Update time period in stats cards
+            document.querySelector('.stat-card:nth-child(1) .stat-info').textContent = `Last ${days} days`;
+        }
+    </script>
+
+        {%else%}
+        <h1>welcome to my homepage</h1>
+        {%endif%}
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <link rel="stylesheet" href="{% static 'registration.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">Rolsa<span>Tech</span></a>
+            <div class="navbar-links">
+                <a href="#">Home</a>
+                <a href="#">About Us</a>
+                <a href="#">Green Energy Products</a>
+                <a href="#">Carbon Calculator</a>
+                <a href="#">Book Now</a>
+                <a href="#">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Enter your details to register</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                    <small class="form-text">Required: 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Create a password" required>
+                    <div class="password-requirements">
+                        <ul>
+                            <li>Your password can't be too similar to your other personal information.</li>
+                            <li>Your password must contain at least 8 characters.</li>
+                            <li>Your password can't be a commonly used password.</li>
+                            <li>Your password can't be entirely numeric.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your password" required>
+                    <small class="form-text">Enter the same password as before, for verification.</small>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                    <label class="form-check-label" for="terms">I agree to the Terms and Privacy Policy</label>
+                </div>
+                
+                <button type="submit" class="btn-primary">Register</button>
+            </form>
+            
+            <div class="divider">
+                <span class="divider-text">OR</span>
+            </div>
+            
+            <div class="social-login">
+                <a href="#" class="social-btn">G</a>
+                <a href="#" class="social-btn">f</a>
+                <a href="#" class="social-btn">in</a>
+            </div>
+            
+            <div class="account-text">
+                Already have an account? <a href="{% url 'login' %}" id="login-link">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Rolsa Technologies. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

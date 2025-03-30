@@ -1,0 +1,1113 @@
+<script>
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    // Service type selection
+    const serviceCards = document.querySelectorAll('.service-card');
+    let selectedService = 'solar';
+
+    serviceCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove active class from all cards
+            serviceCards.forEach(c => c.classList.remove('active'));
+            // Add active class to clicked card
+            card.classList.add('active');
+            // Update selected service
+            selectedService = card.dataset.service;
+            // Update summary
+            updateServiceSummary();
+        });
+    });
+
+    function updateServiceSummary() {
+        const summaryService = document.getElementById('summaryService');
+        if (selectedService === 'solar') {
+            summaryService.textContent = 'Solar Panel Consultation';
+        } else if (selectedService === 'ev') {
+            summaryService.textContent = 'EV Charging Consultation';
+        } else if (selectedService === 'smart') {
+            summaryService.textContent = 'Smart Home Energy Consultation';
+        }
+    }
+
+    // Date selection
+    const calendarDays = document.querySelectorAll('.calendar td:not(.disabled)');
+    let selectedDay = null;
+
+    calendarDays.forEach(day => {
+        day.addEventListener('click', () => {
+            // Remove selected class from all days
+            calendarDays.forEach(d => d.classList.remove('selected'));
+            // Add selected class to clicked day
+            day.classList.add('selected');
+            // Set selected date
+            selectedDay = day.textContent;
+            document.getElementById('selectedDate').value = `April ${selectedDay}, 2025`;
+        });
+    });
+
+    // Time slot selection
+    const timeSlots = document.querySelectorAll('.time-slot:not(.disabled)');
+    
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            // Remove active class from all slots
+            timeSlots.forEach(s => s.classList.remove('active'));
+            // Add active class to clicked slot
+            slot.classList.add('active');
+            // Set selected time
+            document.getElementById('selectedTime').value = slot.textContent;
+        });
+    });
+
+    // Form step navigation
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    
+    const step1Indicator = document.getElementById('step1-indicator');
+    const step2Indicator = document.getElementById('step2-indicator');
+    const step3Indicator = document.getElementById('step3-indicator');
+    
+    const step1Next = document.getElementById('step1Next');
+    const step2Next = document.getElementById('step2Next');
+    const step2Prev = document.getElementById('step2Prev');
+    const step3Prev = document.getElementById('step3Prev');
+    
+    step1Next.addEventListener('click', () => {
+        // Validate step 1
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        
+        if (!fullName || !email || !phone || !address) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        // Move to step 2
+        step1.classList.remove('active');
+        step2.classList.add('active');
+        
+        step1Indicator.classList.remove('active');
+        step1Indicator.classList.add('completed');
+        step2Indicator.classList.add('active');
+    });
+    
+    step2Prev.addEventListener('click', () => {
+        // Move back to step 1
+        step2.classList.remove('active');
+        step1.classList.add('active');
+        
+        step2Indicator.classList.remove('active');
+        step1Indicator.classList.remove('completed');
+        step1Indicator.classList.add('active');
+    });
+    
+    step2Next.addEventListener('click', () => {
+        // Validate step 2
+        const selectedDate = document.getElementById('selectedDate').value;
+        const selectedTime = document.getElementById('selectedTime').value;
+        
+        if (!selectedDate || !selectedTime) {
+            alert('Please select both a date and time for your appointment.');
+            return;
+        }
+        
+        // Update summary
+        document.getElementById('summaryName').textContent = document.getElementById('fullName').value;
+        document.getElementById('summaryEmail').textContent = document.getElementById('email').value;
+        document.getElementById('summaryPhone').textContent = document.getElementById('phone').value;
+        
+        const addressFull = `${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('postcode').value}`;
+        document.getElementById('summaryAddress').textContent = addressFull;
+        
+        document.getElementById('summaryDate').textContent = selectedDate;
+        document.getElementById('summaryTime').textContent = selectedTime;
+        
+        // Move to step 3
+        step2.classList.remove('active');
+        step3.classList.add('active');
+        
+        step2Indicator.classList.remove('active');
+        step2Indicator.classList.add('completed');
+        step3Indicator.classList.add('active');
+    });
+    
+    step3Prev.addEventListener('click', () => {
+        // Move back to step 2
+        step3.classList.remove('active');
+        step2.classList.add('active');
+        
+        step3Indicator.classList.remove('active');
+        step2Indicator.classList.remove('completed');
+        step2Indicator.classList.add('active');
+    });
+    
+    // Form submission
+    const bookingForm = document.getElementById('bookingForm');
+    
+    bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate terms agreement
+        if (!document.getElementById('termsAgree').checked) {
+            alert('Please agree to the terms and conditions to continue.');
+            return;
+        }
+        
+        // Hide form steps and show confirmation
+        document.querySelector('.step-indicator').style.display = 'none';
+        step3.style.display = 'none';
+        
+        // Generate booking reference
+        const bookingRef = `BOL-${Math.floor(10000 + Math.random() * 90000)}`;
+        document.getElementById('bookingReference').textContent = bookingRef;
+        
+        // Show confirmation
+        document.getElementById('bookingConfirmation').style.display = 'block';
+    });
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Consultation - Rolsa Technologies</title>
+<style>
+    /* Global Styles */
+    :root {
+        --primary-color: #2E8B57; /* Sea Green */
+        --secondary-color: #3498DB; /* Tech Blue */
+        --accent-color: #27AE60; /* Emerald Green */
+        --tech-accent: #2C3E50; /* Dark Blue Gray */
+        --light-color: #ECF0F1; /* Light Gray */
+        --dark-color: #1A2A36; /* Dark Slate */
+        --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-primary);
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--primary-color);
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: var(--accent-color);
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: var(--accent-color);
+    }
+
+    .btn-secondary {
+        background-color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover {
+        background-color: #2980b9;
+    }
+
+    /* Header Styles */
+    header {
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .logo h1 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+    }
+
+    .nav-links li {
+        margin-left: 1.5rem;
+    }
+
+    .nav-links a {
+        color: var(--tech-accent);
+        font-weight: 500;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--primary-color);
+    }
+
+    .hamburger {
+        display: none;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--tech-accent);
+    }
+
+    /* Page Header */
+    .page-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+    }
+
+    .page-header h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-header p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Booking Section */
+    .booking-section {
+        padding: 4rem 0;
+    }
+
+    .booking-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .booking-info {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        padding: 2rem;
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    .booking-form {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        padding: 2rem;
+    }
+
+    .section-title {
+        color: var(--tech-accent);
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+    }
+
+    /* Booking Info Styles */
+    .info-text {
+        margin-bottom: 2rem;
+    }
+
+    .info-box {
+        background-color: var(--light-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .info-box h4 {
+        color: var(--tech-accent);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .info-box ul {
+        list-style-position: inside;
+        margin-bottom: 1rem;
+    }
+
+    .info-box li {
+        margin-bottom: 0.5rem;
+    }
+
+    .service-type {
+        margin-bottom: 2rem;
+    }
+
+    .service-type-title {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        color: var(--tech-accent);
+    }
+
+    .service-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .service-card.active {
+        border-color: var(--primary-color);
+        background-color: rgba(46, 139, 87, 0.05);
+    }
+
+    .service-card h4 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        color: var(--tech-accent);
+    }
+
+    .service-card h4 i {
+        color: var(--primary-color);
+        margin-right: 10px;
+    }
+
+    .service-card p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .service-card .price {
+        display: block;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: var(--tech-accent);
+    }
+
+    /* Form Styles */
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--tech-accent);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    .time-slots {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 1rem;
+    }
+
+    .time-slot {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .time-slot:hover {
+        border-color: var(--primary-color);
+    }
+
+    .time-slot.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .time-slot.disabled {
+        background-color: #f5f5f5;
+        color: #999;
+        cursor: not-allowed;
+        border-color: #ddd;
+    }
+
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .calendar th {
+        background-color: var(--light-color);
+        padding: 10px;
+        text-align: center;
+        font-weight: 600;
+        color: var(--tech-accent);
+    }
+
+    .calendar td {
+        border: 1px solid #ddd;
+        padding: 15px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .calendar td:hover:not(.disabled):not(.selected) {
+        background-color: #f0f0f0;
+    }
+
+    .calendar td.disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .calendar td.selected {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .calendar td.today {
+        border: 2px solid var(--secondary-color);
+        font-weight: bold;
+    }
+
+    .step-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+
+    .appointment-summary {
+        background-color: var(--light-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-title {
+        font-size: 1.2rem;
+        color: var(--tech-accent);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Step Indicator */
+    .step-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .step-indicator::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #ddd;
+        z-index: 1;
+    }
+
+    .step {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #666;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .step.completed {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .step-label {
+        position: absolute;
+        top: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    /* Confirmation Box */
+    .confirmation-box {
+        background-color: #e8f5e9;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-top: 2rem;
+        text-align: center;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .confirmation-box i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .confirmation-box h3 {
+        color: var(--tech-accent);
+        margin-bottom: 1rem;
+    }
+
+    /* Footer Styles */
+    footer {
+        background-color: var(--tech-accent);
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    .footer-links {
+        margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+        color: white;
+        margin: 0 10px;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 1rem 0;
+    }
+
+    .social-icons a {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.1);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+        background-color: var(--primary-color);
+    }
+
+    /* Media Queries */
+    @media (max-width: 992px) {
+        .booking-container {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-info {
+            position: static;
+            order: 2;
+        }
+
+        .booking-form {
+            order: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hamburger {
+            display: block;
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background-color: white;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            transform: translateY(-150%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+        }
+
+        .nav-links.active {
+            transform: translateY(0);
+        }
+
+        .nav-links li {
+            margin: 0.5rem 0;
+        }
+
+        .page-header h2 {
+            font-size: 2rem;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .time-slots {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        }
+
+        .step-label {
+            display: none;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/api/placeholder/50/50" alt="Rolsa Technologies Logo">
+                <h1>Rolsa Technologies</h1>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Green Energy Products</a></li>
+                <li><a href="calculator.html">Carbon Footprint</a></li>
+                <li><a href="booking.html" class="active">Book Consultation</a></li>
+                <li><a href="account.html">My Account</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h2>Book a Consultation</h2>
+        <p>Schedule a free consultation with our experts to discuss your sustainable energy needs and get personalized recommendations.</p>
+    </div>
+</section>
+
+<!-- Booking Section -->
+<section class="booking-section">
+    <div class="container">
+        <div class="booking-container">
+            <!-- Booking Information -->
+            <div class="booking-info">
+                <h3 class="section-title">Consultation Information</h3>
+                <div class="info-text">
+                    <p>Our expert consultants will visit your property to assess your energy needs and recommend the best sustainable solutions for your specific situation.</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>What to Expect</h4>
+                    <ul>
+                        <li>Free, no-obligation consultation</li>
+                        <li>Comprehensive energy assessment</li>
+                        <li>Personalized recommendations</li>
+                        <li>Detailed quote within 48 hours</li>
+                        <li>Consultation typically lasts 60-90 minutes</li>
+                    </ul>
+                </div>
+
+                <div class="service-type">
+                    <h4 class="service-type-title">Select Service Type</h4>
+                    <div class="service-card active" data-service="solar">
+                        <h4><i class="fas fa-solar-panel"></i> Solar Panel Consultation</h4>
+                        <p>Assessment of your property's solar potential, energy requirements, and optimal panel placement.</p>
+                        <span class="price">Free Consultation</span>
+                    </div>
+                    <div class="service-card" data-service="ev">
+                        <h4><i class="fas fa-charging-station"></i> EV Charging Consultation</h4>
+                        <p>Evaluation of electrical capacity and best charging solution for your electric vehicle needs.</p>
+                        <span class="price">Free Consultation</span>
+                    </div>
+                    <div class="service-card" data-service="smart">
+                        <h4><i class="fas fa-home"></i> Smart Home Energy Consultation</h4>
+                        <p>Analysis of your current energy usage and recommendations for smart energy management systems.</p>
+                        <span class="price">Free Consultation</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>Prepare for Your Consultation</h4>
+                    <ul>
+                        <li>Recent energy bills (if available)</li>
+                        <li>Property details (size, orientation)</li>
+                        <li>Questions about energy solutions</li>
+                        <li>Information about current energy usage</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="booking-form">
+                <h3 class="section-title">Book Your Appointment</h3>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" id="step1-indicator">
+                        1
+                        <span class="step-label">Your Details</span>
+                    </div>
+                    <div class="step" id="step2-indicator">
+                        2
+                        <span class="step-label">Date & Time</span>
+                    </div>
+                    <div class="step" id="step3-indicator">
+                        3
+                        <span class="step-label">Confirmation</span>
+                    </div>
+                </div>
+
+                <!-- Form Steps -->
+                <form id="bookingForm">
+                    <!-- Step 1: Personal Details -->
+                    <div class="form-step active" id="step1">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" name="fullName" class="form-control" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Property Address *</label>
+                            <input type="text" id="address" name="address" class="form-control" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="postcode">Postcode *</label>
+                                    <input type="text" id="postcode" name="postcode" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propertyType">Property Type *</label>
+                            <select id="propertyType" name="propertyType" class="form-control" required>
+                                <option value="">-- Select Property Type --</option>
+                                <option value="detached">Detached House</option>
+                                <option value="semi-detached">Semi-Detached House</option>
+                                <option value="terraced">Terraced House</option>
+                                <option value="flat">Flat/Apartment</option>
+                                <option value="bungalow">Bungalow</option>
+                                <option value="commercial">Commercial Property</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Additional Notes (Optional)</label>
+                            <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Any specific requirements or questions for our consultant"></textarea>
+                        </div>
+
+                        <div class="step-buttons">
+                            <button type="button" class="btn" id="step1Next">Continue to Select Date</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Date and Time Selection -->
+                    <div class="form-step" id="step2">
+                        <div class="form-group">
+                            <label>Select a Date</label>
+                            <table class="calendar">
+                                <thead>
+                                    <tr>
+                                        <th>Mon</th>
+                                        <th>Tue</th>
+                                        <th>Wed</th>
+                                        <th>Thu</th>
+                                        <th>Fri</th>
+                                        <th>Sat</th>
+                                        <th>Sun</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="disabled">29</td>
+                                        <td class="disabled">30</td>
+                                        <td class="disabled">31</td>
+                                        <td class="today">1</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                        <td class="disabled">4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>6</td>
+                                        <td>7</td>
+                                        <td>8</td>
+                                        <td>9</td>
+                                        <td>10</td>
+                                        <td class="disabled">11</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>13</td>
+                                        <td>14</td>
+                                        <td>15</td>
+                                        <td>16</td>
+                                        <td>17</td>
+                                        <td class="disabled">18</td>
+                                    </tr>
+                                    <tr>
+                                        <td>19</td>
+                                        <td>20</td>
+                                        <td>21</td>
+                                        <td>22</td>
+                                        <td>23</td>
+                                        <td>24</td>
+                                        <td class="disabled">25</td>
+                                    </tr>
+                                    <tr>
+                                        <td>26</td>
+                                        <td>27</td>
+                                        <td>28</td>
+                                        <td>29</td>
+                                        <td>30</td>
+                                        <td class="disabled">1</td>
+                                        <td class="disabled">2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select a Time Slot</label>
+                            <input type="hidden" id="selectedDate" name="selectedDate">
+                            <input type="hidden" id="selectedTime" name="selectedTime">
+                            <div class="time-slots">
+                                <div class="time-slot">09:00 AM</div>
+                                <div class="time-slot">10:00 AM</div>
+                                <div class="time-slot">11:00 AM</div>
+                                <div class="time-slot">12:00 PM</div>
+                                <div class="time-slot">01:00 PM</div>
+                                <div class="time-slot">02:00 PM</div>
+                                <div class="time-slot">03:00 PM</div>
+                                <div class="time-slot disabled">04:00 PM</div>
+                                <div class="time-slot">05:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="step-buttons">
+                            <button type="button" class="btn btn-secondary" id="step2Prev">Back</button>
+                            <button type="button" class="btn" id="step2Next">Continue to Confirm</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="form-step" id="step3">
+                        <h4 class="summary-title">Appointment Summary</h4>
+                        <div class="appointment-summary">
+                            <div class="summary-item">
+                                <span>Service Type</span>
+                                <span id="summaryService">Solar Panel Consultation</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Name</span>
+                                <span id="summaryName"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Email</span>
+                                <span id="summaryEmail"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Phone</span>
+                                <span id="summaryPhone"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Address</span>
+                                <span id="summaryAddress"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Date</span>
+                                <span id="summaryDate"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Time</span>
+                                <span id="summaryTime"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="display: flex; align-items: flex-start;">
+                                <input type="checkbox" id="termsAgree" name="termsAgree" style="margin-top: 5px; margin-right: 10px;" required>
+                                <label for="termsAgree" style="font-weight: normal;">I agree to the <a href="#">Terms & Conditions</a> and consent to being contacted regarding my consultation.</label>
+                            </div>
+                        </div>
+
+                        <div class="step-buttons">
+                            <button type="button" class="btn btn-secondary" id="step3Prev">Back</button>
+                            <button type="submit" class="btn">Confirm Booking</button>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation Message (Hidden by default) -->
+                    <div class="confirmation-box" id="bookingConfirmation" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Booking Confirmed!</h3>
+                        <p>Your consultation has been scheduled successfully. A confirmation email has been sent to your email address.</p>
+                        <p style="margin-top: 1rem;">Booking Reference: <strong id="bookingReference">BOL-12345</strong></p>
+                        <div style="margin-top: 2rem;">
+                            <a href="payment.html" class="btn">Proceed to Payment</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Green Energy Products</a>
+            <a href="calculator.html">Carbon Footprint</a>
+            <a href="booking.html">Book Consultation</a>
+        </div>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; 2025 Rolsa Technologies. All rights reserved.</p>
+    </div>
+</footer>

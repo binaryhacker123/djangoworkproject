@@ -1,0 +1,140 @@
+{%load static%}
+
+
+<!-- Page Header -->
+<link rel="stylesheet" href="{% static 'contact.css' %}">
+<section class="page-header">
+    <div class="container">
+        <h2>Contact Us</h2>
+        <p>Have questions about our sustainable energy solutions? Get in touch with our expert team.</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-container">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3 class="section-title">Get In Touch</h3>
+                <p>We're here to help with any questions you may have about our services or sustainable energy solutions.</p>
+                
+                <div class="info-items">
+                    <div class="info-item">
+                        <div class="icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Our Office</h4>
+                            <p>123 Green Street<br>Eco City, EC1 2GE</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Phone</h4>
+                            <p>+44 (0)123 456 7890</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Email</h4>
+                            <p>info@rolsatech.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Working Hours</h4>
+                            <p>Monday-Friday: 9:00 AM - 5:30 PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <h4>Connect With Us</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <h3 class="section-title">Send Us a Message</h3>
+                
+                {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="post" action="{% url 'contact' %}" class="contact-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Your Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="error-message">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email Address *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="error-message">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.subject.id_for_label }}">Subject *</label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                        <div class="error-message">{{ form.subject.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.message.id_for_label }}">Message *</label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                        <div class="error-message">{{ form.message.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section">
+    <div class="map-container">
+        <!-- Replace with your actual map embed code -->
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.0715324048983!2d-0.1411565435402669!3d51.511903637929585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487605f1202845db%3A0x3ad6f0216c70d64c!2sNOWHERE%20-%20Dark%20Arts%20%40%20Aries%20Soho!5e0!3m2!1sen!2suk!4v1743373668602!5m2!1sen!2suk" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</section>
+ 
